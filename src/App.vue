@@ -8,6 +8,22 @@
   </div>
 </template>
 
+<script>
+import { BModal, VBModal } from 'bootstrap-vue'
+export default {
+  data() {
+    
+  },
+  components: {
+    BModal
+  },
+  directives: {
+    'b-modal': VBModal
+  }
+
+}
+</script>
+
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
