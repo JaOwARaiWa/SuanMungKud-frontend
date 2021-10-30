@@ -4,7 +4,7 @@ import AuthService from '@/services/AuthService'
 
 Vue.use(Vuex)
 
-const auth_key = "auth-ehrm"
+const auth_key = "auth-mungkud"
 let auth = JSON.parse(localStorage.getItem(auth_key))
 
 const initialState = {
@@ -40,8 +40,13 @@ export default new Vuex.Store({
             }
         },
         async logout({ commit }) {
-            AuthService.logout()
-            commit("logoutSuccess")
+            let res = await AuthService.logout()
+            if (res.success) {
+               commit("logoutSuccess")
+                return res
+            } else {
+                return "failed"
+            }
         },
     },
 

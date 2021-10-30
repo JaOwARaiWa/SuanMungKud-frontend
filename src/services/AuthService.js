@@ -75,8 +75,8 @@ export default {
     async logout() {
         try {
             let url = `${api_endpoint}/api/auth/logout`
-            let headers = AuthService.getApiHeader();
-            let res = await Axios.post(url, headers)
+            let headers = this.getApiHeader();
+            let res = await Axios.post(url, "", headers)
             if (res.status === 200) {
                 localStorage.removeItem(auth_key)
                 return {
