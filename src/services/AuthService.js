@@ -72,38 +72,11 @@ export default {
         }
     },
 
-    async logout() {
-        try {
-            let url = `${api_endpoint}/api/auth/logout`
-            let headers = this.getApiHeader();
-            let res = await Axios.post(url, "", headers)
-            if (res.status === 200) {
-                localStorage.removeItem(auth_key)
-                return {
-                    success: true,
-                    message: res.data.message,
-                }
-            } else {
-                console.log("NOT 200", res)
-                return {
-                    sucess: false,
-                    message: "failed"
-                }
-            }
-        } catch (e) {
-            if (e.response.status === 400) {
-                console.error(e.response.data.message[0].messages[0].message)
-                return {
-                    success: false,
-                    message: e.response.data.message[0].messages[0].message
-                }
-            } else {
-                console.error(e.response)
-                return {
-                    success: false,
-                    message: "Unknown error: " + e.response
-                }
-            }
+    logout() {
+        localStorage.removeItem(auth_key)
+        return {
+            success: true,
+            message: "Logout successfully"
         }
     },
 }

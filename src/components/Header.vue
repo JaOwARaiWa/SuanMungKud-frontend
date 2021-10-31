@@ -12,7 +12,10 @@
                 <span class="mungkud">MUNGKUD</span>
             </h1>
 
-            <h1 class="user-name">{{ this.user.name }}</h1>
+            <div class="user-name">
+                <h1 class="name">{{ this.user.name }}</h1>
+            </div>
+
 
             <div class="logout">
                 <b-icon icon="box-arrow-right" class="logout-icon" @click.prevent="logout" />
@@ -81,8 +84,9 @@ export default {
         font-size: 4em;
         text-align: center;
         text-shadow: 3px 5px 5px rgba(0, 0, 0, .75);
-        width: 40%;
+        width: 850px;
         padding-left: 60px;
+        padding-right: 400px;
 
         .suan {
             color: #FFFFFF;
@@ -94,10 +98,15 @@ export default {
     }
     .user-name {
         color: #FFFFFF;
-        transform: translate(350%, 12.5%);
+        min-width: 400px;
+
+        .name {
+            padding-top: 10px;
+        }
+
     }
     .logout {
-        transform: translate(800%, -10%);
+        transform: translate(10%, -10%);
 
         .logout-icon {
             width: 100px;
