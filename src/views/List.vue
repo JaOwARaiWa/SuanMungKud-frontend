@@ -2,35 +2,35 @@
     <div class="list-page">
         <Header></Header>
 
-        <div class="container mt-5">
+        <div class="container mt-4">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="text">User list</h1>
+                        <h1 class="text">รายชื่อผู้ใช้</h1>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-3 mb-2">
-                        <label for="search" class="text">Search user by name</label>
-                        <input v-model="searchUser" type="text" class="flex field" placeholder="Enter name">
+                        <label for="search" class="text">ค้นหาจากชื่อ</label>
+                        <input v-model="searchUser" type="text" class="flex field" placeholder="กรอกชื่อเพื่อค้นหา">
                     </div>
                     <div class="col-lg-9"></div>
                 </div>
 
             </div>
 
-            <div class="background bg-dark">
+            <!-- <div class="background bg-dark">
                 <div class="table-wrap">
-                    <table class="table .table-responsive table-sm table-bordered table-hover table-striped table-dark">
+                    <table class="table table-responsive table-sm table-bordered table-hover table-striped table-dark">
                         <thead>
                             <tr>
                                 <th>id</th>
-                                <th>role</th>
-                                <th>name</th>
+                                <th>ตำแหน่ง</th>
+                                <th>ชื่อ</th>
                                 <th>email</th>
-                                <th>telephone</th>
-                                <th>bank account</th>
+                                <th>เบอร์ติดต่อ</th>
+                                <th>เลขบัญชี</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,117 +39,145 @@
                                 <td>{{ user.role }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>{{ user.telephone }}</td>
+                                <td>{{ user.contact_number }}</td>
                                 <td>{{ user.bank_account }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-            </div>
+            </div> -->
 
-            <div class="box">
-                <button type="button" class="btn btn-primary" @click=" show = true">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
-                        <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
-                        <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
-                    </svg>
-                    Add new user
-                </button>
-
-                <b-modal v-model="show" title="Add new user">
-                    <b-container>
-                        <b-form @submit.stop.prevent="onSubmit" class="need-validation" novalidate>
-                            <!-- <b-row class="mb-1">
-                                <b-col cols="2 col-sm-5">Name</b-col>
-                                <b-col>
-                                    <input type="text" style="color: black;" required>
-                                </b-col>
-                            </b-row>
-
-                            <b-row class="mb-1 text-left">
-                                <b-col cols="2 col-sm-5">Email</b-col>
-                                <b-col>
-                                    <input type="text" style="color: black;">
-                                </b-col>
-                            </b-row>
-
-                            <b-row class="mb-1 text-left">
-                                <b-col cols="2 col-sm-5">Password</b-col>
-                                <b-col>
-                                    <input type="text" style="color: black;">
-                                </b-col>
-                            </b-row>
-
-                            <b-row class="mb-1 text-left">
-                                <b-col cols="2 col-sm-5" class="text-left">Confirm password</b-col>
-                                <b-col>
-                                    <input type="text" style="color: black;">
-                                </b-col>
-                            </b-row>
-
-                            <b-row class="mb-1 text-left">
-                                <b-col cols="2 col-sm-5">Telephone</b-col>
-                                <b-col>
-                                    <input type="text" style="color: black;">
-                                </b-col>
-                            </b-row>
-
-                            <b-row class="mb-1 text-left">
-                                <b-col cols="2 col-sm-5">Bank account</b-col>
-                                <b-col>
-                                    <input type="text" style="color: black;">
-                                </b-col>
-                            </b-row>
-
-                            <b-row class="mb-1 text-left">
-                                <b-col cols="2 col-sm-5">Role</b-col>
-                                <b-col>
-                                    <b-form-select v-model="form.role" :options="userRole" value="EMPLOYEE" />
-                                </b-col>
-                            </b-row>  -->
-
-                            <b-form-group label="Name">
-                                <b-form-input v-model="$v.form.name.$model" class="text-dark" :state="validateState('name')" aria-describedby="input-1-live-feedback" />
-                                <b-form-invalid-feedback id="input-1-live-feedback">require at least 2 characters.</b-form-invalid-feedback>
-                            </b-form-group>
-
-                            <b-form-group label="Email">
-                                <b-form-input v-model="$v.form.email.$model" class="text-dark" :state="validateState('email')" aria-describedby="input-1-live-feedback" />
-                                <b-form-invalid-feedback id="input-1-live-feedback">require email.</b-form-invalid-feedback>
-                            </b-form-group>
-
-                            <b-form-group label="Password">
-                                <b-form-input type="password" v-model="$v.form.password.$model" class="text-dark" :state="validateState('password')" aria-describedby="input-1-live-feedback" />
-                                <b-form-invalid-feedback id="input-1-live-feedback">require at least 8 characters.</b-form-invalid-feedback>
-                            </b-form-group>
-
-                            <b-form-group label="Telephone">
-                                <b-form-input v-model="$v.form.contact_number.$model" class="text-dark" :state="validateState('contact_number')" aria-describedby="input-1-live-feedback" />
-                                <b-form-invalid-feedback id="input-1-live-feedback">require at least 10 characters.</b-form-invalid-feedback>
-                            </b-form-group>
-
-                            <b-form-group label="Bank account">
-                                <b-form-input v-model="$v.form.bank_account.$model" class="text-dark" :state="validateState('bank_account')" aria-describedby="input-1-live-feedback" />
-                                <b-form-invalid-feedback id="input-1-live-feedback">require at least 10 characters.</b-form-invalid-feedback>
-                            </b-form-group>
-
-                            <b-form-group id="example-input-group-2" label="Role">
-                                <b-form-select v-model="selectedRole" :options="userRole" />
-                            </b-form-group>
-
-                        </b-form>
-                    </b-container>
-
-                    <template #modal-footer>
-                        <div class="w-100 d-flex flex-row-reverse">
-                            <b-button type="submit" variant="success" size="sm" class="float-right" @click="onSubmit">
-                                Create
-                            </b-button>
-                        </div>
+            <div class="table-wrap bg-dark">
+                <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :hover="true" :dark="true" :items="resultQuery" :fields="fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected">
+                    <template #cell(selected)="{ rowSelected }">
+                        <template v-if="rowSelected">
+                            <span aria-hidden="true">&check;</span>
+                            <span class="sr-only">เลือก</span>
+                        </template>
+                        <template v-else>
+                            <span aria-hidden="true">&nbsp;</span>
+                            <span class="sr-only">ยังไม่ได้เลือก</span>
+                        </template>
                     </template>
-                </b-modal>
+                </b-table>
             </div>
+
+            <b-container class="bv-example-row">
+                <b-row align-h="between">
+                    <b-col cols="4">
+                        <div class="p-2">
+                            <b-button class="m-1 bg-danger" size="sm" @click="deleteSelected">ลบผู้ใช้ที่เลือก</b-button>
+                        </div>
+                    </b-col>
+                    <b-col cols="4 m-2" class="d-flex justify-content-end">
+
+                            <button type="button" class="btn btn-primary" @click=" show = true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
+                                    <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
+                                    <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
+                                </svg>
+                                เพิ่มผู้ใช้
+                            </button>
+
+                            <b-modal v-model="show" title="เพิ่มผู้ใช้ใหม่">
+                                <b-container>
+                                    <b-form @submit.stop.prevent="onSubmit" class="need-validation" novalidate>
+                                        <!-- <b-row class="mb-1">
+                                            <b-col cols="2 col-sm-5">Name</b-col>
+                                            <b-col>
+                                                <input type="text" style="color: black;" required>
+                                            </b-col>
+                                        </b-row>
+
+                                        <b-row class="mb-1 text-left">
+                                            <b-col cols="2 col-sm-5">Email</b-col>
+                                            <b-col>
+                                                <input type="text" style="color: black;">
+                                            </b-col>
+                                        </b-row>
+
+                                        <b-row class="mb-1 text-left">
+                                            <b-col cols="2 col-sm-5">Password</b-col>
+                                            <b-col>
+                                                <input type="text" style="color: black;">
+                                            </b-col>
+                                        </b-row>
+
+                                        <b-row class="mb-1 text-left">
+                                            <b-col cols="2 col-sm-5" class="text-left">Confirm password</b-col>
+                                            <b-col>
+                                                <input type="text" style="color: black;">
+                                            </b-col>
+                                        </b-row>
+
+                                        <b-row class="mb-1 text-left">
+                                            <b-col cols="2 col-sm-5">Telephone</b-col>
+                                            <b-col>
+                                                <input type="text" style="color: black;">
+                                            </b-col>
+                                        </b-row>
+
+                                        <b-row class="mb-1 text-left">
+                                            <b-col cols="2 col-sm-5">Bank account</b-col>
+                                            <b-col>
+                                                <input type="text" style="color: black;">
+                                            </b-col>
+                                        </b-row>
+
+                                        <b-row class="mb-1 text-left">
+                                            <b-col cols="2 col-sm-5">Role</b-col>
+                                            <b-col>
+                                                <b-form-select v-model="form.role" :options="userRole" value="EMPLOYEE" />
+                                            </b-col>
+                                        </b-row>  -->
+
+                                        <b-form-group label="ชื่อ">
+                                            <b-form-input v-model="$v.form.name.$model" class="text-dark" :state="validateState('name')" aria-describedby="input-1-live-feedback" />
+                                            <b-form-invalid-feedback id="input-1-live-feedback">ต้องการอย่างน้อย 2 ตัวอักษร</b-form-invalid-feedback>
+                                        </b-form-group>
+
+                                        <b-form-group label="Email">
+                                            <b-form-input v-model="$v.form.email.$model" class="text-dark" :state="validateState('email')" aria-describedby="input-1-live-feedback" />
+                                            <b-form-invalid-feedback id="input-1-live-feedback">ต้องเป็นอีเมลล์</b-form-invalid-feedback>
+                                        </b-form-group>
+
+                                        <b-form-group label="Password">
+                                            <b-form-input type="password" v-model="$v.form.password.$model" class="text-dark" :state="validateState('password')" aria-describedby="input-1-live-feedback" />
+                                            <b-form-invalid-feedback id="input-1-live-feedback">ต้องการอย่างน้อย 8 ตัวอักษร</b-form-invalid-feedback>
+                                        </b-form-group>
+
+                                        <b-form-group label="เบอร์ติดต่อ">
+                                            <b-form-input v-model="$v.form.contact_number.$model" class="text-dark" :state="validateState('contact_number')" aria-describedby="input-1-live-feedback" />
+                                            <b-form-invalid-feedback id="input-1-live-feedback">ต้องการอย่างน้อย 10 ตัวอักษร</b-form-invalid-feedback>
+                                        </b-form-group>
+
+                                        <b-form-group label="เลขบัญชี">
+                                            <b-form-input v-model="$v.form.bank_account.$model" class="text-dark" :state="validateState('bank_account')" aria-describedby="input-1-live-feedback" />
+                                            <b-form-invalid-feedback id="input-1-live-feedback">ต้องการอย่างน้อย 10 ตัวอักษร</b-form-invalid-feedback>
+                                        </b-form-group>
+
+                                        <b-form-group id="example-input-group-2" label="ตำแหน่ง">
+                                            <b-form-select v-model="selectedRole" :options="userRole" />
+                                        </b-form-group>
+
+                                    </b-form>
+                                </b-container>
+
+                                <template #modal-footer>
+                                    <div class="w-100 d-flex flex-row-reverse">
+                                        <b-button type="submit" variant="success" size="sm" class="float-right" @click="onSubmit">
+                                            เพิ่ม
+                                        </b-button>
+                                    </div>
+                                </template>
+                            </b-modal>
+  
+                    </b-col>
+                </b-row>
+            </b-container>
+
+            
         </div>
         
     </div>
@@ -158,6 +186,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import AdminStore from "@/store/Admin"
+import AuthService from '@/services/AuthService'
 import { validationMixin } from "vuelidate";
 import { required, minLength, email } from "vuelidate/lib/validators";
 
@@ -169,6 +198,7 @@ export default {
     },
     data() {
         return {
+            currentUser: {},
             searchUser: null,
             allUsers: [],
             searchList: [],
@@ -182,9 +212,12 @@ export default {
                 contact_number: "",
                 bank_account: "",
             },
+            fields: ['selected', 'id', 'role', 'name', 'email', 'contact_number', 'bank_account'],
+            selectMode: 'single',
+            selected: [],
         }
     },
-    async created(){
+    async created() {
         await this.fetchAllUser()
     },
     validations: {
@@ -211,15 +244,33 @@ export default {
             },
         }
     },
-    methods:{
-        async fetchAllUser(){
+    methods: {
+        async fetchAllUser() {
             await AdminStore.dispatch('fetchAllUser')
             this.searchList = AdminStore.getters.users
             this.allUsers = AdminStore.getters.users
+            this.currentUser = AuthService.getUser()
         },
         validateState(name) {
             const { $dirty, $error } = this.$v.form[name];
             return $dirty ? !$error : null;
+        },
+        onRowSelected(items) {
+            this.selected = items
+        },
+        async deleteSelected() {
+            if (this.selected[0].id == this.currentUser.id) {
+                this.$swal("ไม่สามารถลบผู้ใช้ได้", `ไม่สามารถลบตัวเองออกจากระบบได้`, "error")
+            } else {
+                let res = await AdminStore.dispatch('deleteUser', this.selected)
+                if (res.success) {
+                    this.show = false;
+                    this.$swal("ลบผู้ใช้สำเร็จ", `ได้ลบผู้ใช้ออกจากระบบแล้วแล้ว`, "success")
+                    await this.fetchAllUser()
+                } else {
+                    this.$swal("ลบผู้ใช้ไม่สำเร็จ", `ไม่สามารถลบผู้ใช้นี้ได้`, "error")
+                }                
+            }
         },
         async onSubmit() {
             this.$v.form.$touch();
@@ -234,27 +285,25 @@ export default {
                     bank_account: this.form.bank_account,
                     role: this.selectedRole
                 }
-                console.log(payload);
                 let res = await AdminStore.dispatch('createUser', payload)
-                console.log(res);
                 if (res.success) {
                     this.show = false;
-                    this.$swal("Create successfully", `${res.data.name} in role ${res.data.role} is added`, "success")
+                    this.$swal("เพิ่มผู้ใช้ใหม่สำเร็จ", `ได้เพิ่มคุณ ${res.data.name} ในตำแหน่ง ${res.data.role} แล้ว`, "success")
                     await this.fetchAllUser()
                 } else {
-                    this.$swal("Create failed", `this email already used`, "error")
+                    this.$swal("เพิ่มผู้ใช้ไม่สำเร็จ", `โปรดตรวจสอบข้อมูลอีกครั้ง`, "error")
                 }
             }
         }
     },
     computed: {
-        resultQuery(){
-            if(this.searchUser){
-                return this.allUsers.filter((item)=>{
+        resultQuery() {
+            if (this.searchUser) {
+                return this.allUsers.filter((item) => {
                     return this.searchUser.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
                 })
-                }else{
-                    return this.allUsers;
+            } else {
+                return this.allUsers;
             }
         }
     }
@@ -298,11 +347,16 @@ export default {
         color: #FFFFFF;
         opacity: .6;
     }
-    
     [type=text] {
         color: #FFFFFF;
         opacity: 1;
         font-size: 1.25em;
     }
-
+    .table > tbody > tr.b-row-selected
+        /deep/ .table > tbody > tr.b-table-row-selected,
+        /deep/ .table > tbody > tr.b-table-row-selected > td,
+        /deep/ .table > tbody > tr.b-table-row-selected > th {
+        //background-color: #DE89BE;
+        background-color: #5C2751;
+    }
 </style>

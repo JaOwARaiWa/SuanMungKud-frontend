@@ -15,12 +15,43 @@ export default {
         }
     },
 
+    async getEmployee() {
+        try {
+            let url = `${api_endpoint}/api/admin/all-employees`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header);
+            return res
+        } catch (e) {
+            
+        }
+    },
+
+    async deleteUser(id) {
+        try {
+            let url = `${api_endpoint}/api/admin/delete-user/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.post(url, "", header);
+            if (res.status === 200)
+            {
+               return {
+                   success: true,
+                   data: res
+               }
+            } else {
+                return {
+                    success: false,
+                }
+            }
+        } catch (e) {
+            
+        }
+    },
+
     async createUser(newUser) {
         try {
             let url = `${api_endpoint}/api/admin/create-user`;
             let header = AuthService.getApiHeader();
             let res = await Axios.post(url, newUser, header)
-            console.log(res);
             if (res.data.message == "create success")
             {
                return {

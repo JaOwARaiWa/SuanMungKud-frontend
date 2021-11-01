@@ -35,6 +35,18 @@ export default new Vuex.Store({
             }
             return payload
         },
+        async fetchEmployeee({ commit }) {
+            let payload = await AdminService.getEmployee();
+            commit("fetch", payload.data)
+        },
+        async deleteUser({ commit }, payload) {
+            let res = await AdminService.deleteUser(payload[0].id);
+            if (res.success) {
+                commit("fetch", res.data)
+                return res
+            }
+            return res
+        }
     },
 
     modules: {
