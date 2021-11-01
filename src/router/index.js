@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
-import Employee from '../views/Employee.vue'
+import List from '../views/List.vue'
 import AssignWork from '../views/AssignWork.vue'
 import CalculateDelivery from '../views/CalculateDelivery.vue'
 import CreateInvoice from '../views/CreateInvoice.vue'
@@ -22,9 +22,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/employee',
-    name: 'Employee',
-    component: Employee
+    path: '/list',
+    name: 'List',
+    component: List
   },
   {
     path: '/assign',

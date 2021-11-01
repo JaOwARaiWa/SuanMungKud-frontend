@@ -4,9 +4,9 @@
         
         <div class="home-background">
             <div class="home-menu">
-                <div class="menu" @click="go('/employee')" v-if="this.role == 'ADMIN'">
+                <div class="menu" @click="go('/list')" v-if="this.role == 'ADMIN'">
                     <b-icon icon="person" class="icon" />
-                    <h3 class="text">Employee Management</h3>
+                    <h3 class="text">User Management</h3>
                 </div>
 
                 <div class="menu" @click="go('/assign')" v-if="this.role == 'ADMIN'">
@@ -105,7 +105,7 @@ export default {
 
                 .text {
                     color: #5C2751;
-                    margin: 15px;
+                    margin: 20px;
                 }           
             }
 

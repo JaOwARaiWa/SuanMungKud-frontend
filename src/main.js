@@ -12,6 +12,10 @@ import axios from 'axios'
 
 import VueSwal from 'vue-swal'
  
+import Vuelidate from 'vuelidate'
+
+Vue.use(Vuelidate)
+
 Vue.use(VueSwal)
 
 Vue.use(BootstrapVue)

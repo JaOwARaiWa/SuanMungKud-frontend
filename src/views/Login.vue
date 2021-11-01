@@ -71,19 +71,23 @@ export default {
             this.errors = ""
 
             if (this.form.email == "" || this.form.password == "") {
-                if (this.form.email == "" && this.form.password == "") {
+                if (this.form.email == "" && this.form.password != "") {
+                    // this.errors = 'email required'
+                    // this.$swal("Please enter your email", "Check if you already enter email or not", "error")
                     this.errors = 'fields required'
                     this.$swal("Please fill out all fields", "You have to enter your email and password to login", "error")
 
-                } else if (this.form.email == "") {
-                    this.errors = 'email required'
-                    this.$swal("Please enter your email", "Check if you already enter email or not", "error")
+                } else if (this.form.password == "" && this.form.email != "") {
+                    // this.errors = 'password required'
+                    // this.$swal("Please enter your password", "Check if you already enter password or not", "error")
+                    this.errors = 'fields required'
+                    this.$swal("Please fill out all fields", "You have to enter your email and password to login", "error")
 
-                } else if (this.form.password == "") {
-                    this.errors = 'password required'
-                    this.$swal("Please enter your password", "Check if you already enter password or not", "error")
+                } else if (this.form.email == "" && this.form.password == "") {
+                    this.errors = 'fields required'
+                    this.$swal("Please fill out all fields", "You have to enter your email and password to login", "error")
 
-                }
+                } 
             } else {
                 let payload = {
                     email: this.form.email,

@@ -1,5 +1,5 @@
 <template>
-    <nav class="header-background">
+    <!-- <nav class="header-background">
         <div class="header">
             <div class="back" v-if="this.$router.currentRoute.path != '/home'">
                 <b-icon icon="chevron-left" class="back-icon" @click.prevent="back" />
@@ -19,6 +19,33 @@
 
             <div class="logout">
                 <b-icon icon="box-arrow-right" class="logout-icon" @click.prevent="logout" />
+            </div>
+        </div>
+    </nav> -->
+
+    <nav class="navbar navbar-expand-lg header-background">
+        <div class="container-fluid">
+
+            <div class="back" v-if="this.$router.currentRoute.path != '/home'">
+                <b-icon icon="chevron-left" class="back-icon" @click.prevent="back" />
+            </div>
+
+            <div class="non-back" v-if="this.$router.currentRoute.path == '/home'"></div>
+
+            <h1 class="navbar-brand app-name">
+                <span class="suan">SUAN</span>
+                <span class="mungkud">MUNGKUD</span>
+            </h1>
+
+            <nav class="navbar-nav ms-auto">
+                <div class="nav-item user-name">
+                    <h1 class="nav-item name">{{ this.user.name }}</h1>
+                </div>                
+            </nav>
+
+            
+            <div class="navbar-nav ms-auto logout">
+                <b-icon icon="box-arrow-right" class="nav-item logout-icon" @click.prevent="logout" />
             </div>
         </div>
     </nav>
@@ -60,11 +87,10 @@ export default {
     }
     .header {
         padding-top: 20px;
-        width: 50%;
         display: flex;
     }
     .back {
-        padding-left: 30px;
+        //padding-left: 30px;
 
         .back-icon {
             width: 80px;
@@ -78,15 +104,16 @@ export default {
         }           
     }
     .non-back {
-        padding-left: 110px;
+        //padding-left: 110px;
+        padding-left: 80px;
     }
     .app-name {
         font-size: 4em;
         text-align: center;
         text-shadow: 3px 5px 5px rgba(0, 0, 0, .75);
-        width: 850px;
-        padding-left: 60px;
-        padding-right: 400px;
+        // width: 850px;
+        // padding-left: 60px;
+        // padding-right: 400px;
 
         .suan {
             color: #FFFFFF;
@@ -98,15 +125,17 @@ export default {
     }
     .user-name {
         color: #FFFFFF;
-        min-width: 400px;
+        
+        //min-width: 400px;
 
         .name {
-            padding-top: 10px;
+            // padding-top: 10px;
+            // padding-right: 50px;
         }
 
     }
     .logout {
-        transform: translate(10%, -10%);
+        // transform: translate(10%, -10%);
 
         .logout-icon {
             width: 100px;
@@ -119,6 +148,5 @@ export default {
             color: #F1FFB1;
         }                 
     }
-
 
 </style>
