@@ -35,6 +35,14 @@ export default new Vuex.Store({
             }
             return payload
         },
+        async createInvoice({ commit }, newInvoice) {
+            let payload = await AdminService.createInvoice(newInvoice);
+            if (payload.success) {
+                commit("push", payload.data)
+                return payload
+            }
+            return payload
+        },
         async fetchCanAssigned({ commit }, date) {
             let payload = await AdminService.getCanAssigned(date);
             if (payload == null || payload == "" || payload == undefined) {
@@ -44,6 +52,10 @@ export default new Vuex.Store({
         },
         async fetchEmployeee({ commit }) {
             let payload = await AdminService.getEmployee();
+            commit("fetch", payload.data)
+        },
+        async fetchPartner({ commit }) {
+            let payload = await AdminService.getPartner();
             commit("fetch", payload.data)
         },
         async deleteUser({ commit }, payload) {

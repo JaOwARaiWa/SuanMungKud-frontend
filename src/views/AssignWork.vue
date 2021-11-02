@@ -6,7 +6,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="text">รายชื่อพนักงาน</h1>
+                        <h1 class="text-dark">รายชื่อพนักงาน</h1>
                     </div>
                 </div>
 
@@ -60,16 +60,6 @@
                             <span class="sr-only">ยังไม่ได้เลือก</span>
                         </template>
                     </template>
-
-                    <template #cell(assigned)="{ rowSelected }">
-                        <template v-if="rowSelected">
-                            <span class="sr-only">สั่งแล้ว</span>
-                        </template>
-                        <template v-else>
-                            <span aria-hidden="true">&nbsp;</span>
-                            <span class="sr-only">-</span>
-                        </template>
-                    </template>
                 </b-table>
             </div>
 
@@ -104,7 +94,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import AdminStore from "@/store/Admin"
-import AuthService from '@/services/AuthService'
+import AuthUser from '@/store/AuthUser'
 
 export default {
     name:'AssignWork',
@@ -119,15 +109,6 @@ export default {
             allUsers: [],
             searchList: [],
             show: false,
-            userRole: ['EMPLOYEE', 'PARTNER', 'ADMIN'],
-            selectedRole: 'EMPLOYEE',
-            form: {
-                name: "",
-                email: "",
-                password: "",
-                contact_number: "",
-                bank_account: "",
-            },
             fields: ['selected', 'id', 'role', 'name', 'contact_number'],
             selected: [],
         }
@@ -146,7 +127,7 @@ export default {
             await AdminStore.dispatch('fetchCanAssigned', date)
             this.allUsers = AdminStore.getters.users;
             this.searchList = AdminStore.getters.users;
-            this.currentUser = AuthService.getUser()
+            this.currentUser = AuthUser.getters.user
         },
         onRowSelected(items) {
             this.selected = items
@@ -165,7 +146,6 @@ export default {
                     data: this.selected,
                     admin: this.currentUser.id
                 }
-                console.log(payload);
                 let res = await AdminStore.dispatch('assignWork', payload);
                 if (res.success) {
                     this.$swal("การสั่งงานสำเร็จ", "คุณได้สั่งพนักงานเก็บผลไม้แล้ว", "success");
@@ -174,13 +154,11 @@ export default {
                     this.$swal("การสั่งงานไม่สำเร็จ", "ไม่สามารถสั่งงานได้", "error");
                 }
             }
-            
-            
         }
     },
     computed: {
         resultQuery() {
-            if(this.searchUser) {
+            if (this.searchUser) {
                 return this.allUsers.filter((item) => {
                     return this.searchUser.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
                 })

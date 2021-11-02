@@ -186,7 +186,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import AdminStore from "@/store/Admin"
-import AuthService from '@/services/AuthService'
+import AuthUser from '@/store/AuthUser'
 import { validationMixin } from "vuelidate";
 import { required, minLength, email } from "vuelidate/lib/validators";
 
@@ -249,7 +249,7 @@ export default {
             await AdminStore.dispatch('fetchAllUser')
             this.searchList = AdminStore.getters.users
             this.allUsers = AdminStore.getters.users
-            this.currentUser = AuthService.getUser()
+            this.currentUser = AuthUser.getters.user
         },
         validateState(name) {
             const { $dirty, $error } = this.$v.form[name];

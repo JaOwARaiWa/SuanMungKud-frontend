@@ -26,6 +26,17 @@ export default {
         }
     },
 
+    async getPartner() {
+        try {
+            let url = `${api_endpoint}/api/admin/all-partners`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header);
+            return res
+        } catch (e) {
+            
+        }
+    },
+
     async getCanAssigned(date) {
         try {
             let url = `${api_endpoint}/api/admin/can-assigned/${date}`;
@@ -101,6 +112,39 @@ export default {
                return {
                    success: true,
                    data: res.data.new_user
+               }
+            } else {
+                return {
+                    success: false,
+                }
+            }
+        } catch (e) {
+            if (e.response.status === 400) {
+                console.error(e.response.data.message[0].messages[0].message)
+                return {
+                    success: false,
+                    message: e.response.data.message[0].messages[0].message
+                }
+            } else {
+                console.error(e.response)
+                return {
+                    success: false,
+                    message: "Unknown error: " + e.response
+                }
+            }
+        }
+    },
+
+    async createInvoice(newInvoice) {
+        try {
+            let url = `${api_endpoint}/api/admin/create-invoice`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.post(url, newInvoice, header)
+            if (res.status === 200)
+            {
+               return {
+                   success: true,
+                   data: res.data
                }
             } else {
                 return {
