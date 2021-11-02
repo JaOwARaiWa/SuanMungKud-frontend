@@ -35,6 +35,13 @@ export default new Vuex.Store({
             }
             return payload
         },
+        async fetchCanAssigned({ commit }, date) {
+            let payload = await AdminService.getCanAssigned(date);
+            if (payload == null || payload == "" || payload == undefined) {
+                return "nothing"
+            }
+            commit("fetch", payload.data)
+        },
         async fetchEmployeee({ commit }) {
             let payload = await AdminService.getEmployee();
             commit("fetch", payload.data)
@@ -46,6 +53,13 @@ export default new Vuex.Store({
                 return res
             }
             return res
+        },
+        async assignWork({ commit }, data) {
+            let payload = await AdminService.assignWork(data);
+            if (payload.success) {
+                return payload;
+            }
+            return payload;
         }
     },
 
