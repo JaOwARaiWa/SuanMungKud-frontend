@@ -1,12 +1,22 @@
 <template>
     <div class="home-page">
-        <Header></Header>
+        <Header></Header>               
         
         <div class="home-background">
             <div class="home-menu">
                 <div class="menu" @click="go('/list')" v-if="this.role == 'ADMIN'">
                     <b-icon icon="person" class="icon" />
                     <h3 class="text">การจัดการผู้ใช้</h3>
+                </div>
+
+                <div class="menu" @click="go('/list')" v-if="this.role == 'EMPLOYEE'">
+                    <b-icon icon="clipboard" class="icon" />
+                    <h3 class="text">งานวันนี้</h3>
+                </div>
+
+                <div class="menu" @click="go('/list')" v-if="this.role == 'PARTNER'">
+                    <b-icon icon="file-earmark-text" class="icon" />
+                    <h3 class="text">รายการใบส่งสินค้า</h3>
                 </div>
 
                 <div class="menu" @click="go('/assign')" v-if="this.role == 'ADMIN'">
@@ -23,7 +33,7 @@
                         <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"/>
                         <path class="extra" d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-2zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-4z"/>
                     </svg>
-                    <h3 class="text">คำนวณรอบการส่งสินค้า</h3>
+                    <h3 class="text">คำนวณรอบการส่งและออกใบส่งสินค้า</h3>
                 </div>
 
                 <div class="menu" @click="go('/pay')" v-if="this.role == 'ADMIN'">

@@ -1,28 +1,4 @@
 <template>
-    <!-- <nav class="header-background">
-        <div class="header">
-            <div class="back" v-if="this.$router.currentRoute.path != '/home'">
-                <b-icon icon="chevron-left" class="back-icon" @click.prevent="back" />
-            </div>
-
-            <div class="non-back" v-if="this.$router.currentRoute.path == '/home'"></div>
-
-            <h1 class="app-name">
-                <span class="suan">SUAN</span>
-                <span class="mungkud">MUNGKUD</span>
-            </h1>
-
-            <div class="user-name">
-                <h1 class="name">{{ this.user.name }}</h1>
-            </div>
-
-
-            <div class="logout">
-                <b-icon icon="box-arrow-right" class="logout-icon" @click.prevent="logout" />
-            </div>
-        </div>
-    </nav> -->
-
     <nav class="navbar navbar-expand-lg header-background">
         <div class="container-fluid">
 

@@ -17,8 +17,11 @@ export default new Vuex.Store({
         fetch(state, payload) {
             state.data = payload;
         },
-        push(state, payload){
+        push(state, payload) {
             state.data = payload
+        },
+        clear(state) {
+            state.data = []
         }
     },
 
@@ -26,6 +29,49 @@ export default new Vuex.Store({
         async fetchAllUser({ commit }) {
             let payload = await AdminService.getAllUser();
             commit("fetch", payload.data)
+        },
+        async fetchMyWork({ commit }, id) {
+            let payload = await AdminService.getMyWork(id);
+            if (payload.success) {
+                commit("fetch", payload.data)
+                return payload.data
+            }
+            commit("clear")
+            return payload
+        },
+        async fetchMyInvoice({ commit }, id) {
+            let payload = await AdminService.getMyInvoice(id);
+            if (payload.success) {
+                commit("fetch", payload.data)
+                return payload.data.invoice
+            }
+            commit("clear")
+            return payload
+        },
+        async workDone({ commit }, id) {
+            let payload = await AdminService.workDone(id);
+            if (payload.success) {
+                commit("clear")
+                commit("fetch", payload.data)
+                return payload
+            }
+            return payload
+        },
+        async accepted({ commit }, id) {
+            let payload = await AdminService.accepted(id);
+            if (payload.success) {
+                commit("clear")
+                commit("fetch", payload.data)
+                return payload
+            }
+            return payload
+        },
+        async updatePaymentStatus({ commit }, id) {
+            let payload = await AdminService.updatePaymentStatus(id);
+            if (payload.success) {
+                return payload
+            }
+            return payload
         },
         async createUser({ commit }, newUser) {
             let payload = await AdminService.createUser(newUser);
@@ -38,7 +84,6 @@ export default new Vuex.Store({
         async createInvoice({ commit }, newInvoice) {
             let payload = await AdminService.createInvoice(newInvoice);
             if (payload.success) {
-                commit("push", payload.data)
                 return payload
             }
             return payload
@@ -49,6 +94,7 @@ export default new Vuex.Store({
                 return "nothing"
             }
             commit("fetch", payload.data)
+            return payload.data
         },
         async fetchEmployeee({ commit }) {
             let payload = await AdminService.getEmployee();
@@ -72,7 +118,10 @@ export default new Vuex.Store({
                 return payload;
             }
             return payload;
-        }
+        },
+        async clearData({ commit }) {
+            commit("clear")
+        },
     },
 
     modules: {

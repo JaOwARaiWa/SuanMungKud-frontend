@@ -53,13 +53,13 @@
                                     <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
                                     <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
                                 </svg>
-                                สร้างใบส่งของ
+                                สร้างใบส่งสินค้า
                             </b-button>
                         </div>
                     </b-col>
                 </b-row>
 
-                <b-modal v-model="show" size="xl" title="ใบส่งของ">
+                <b-modal v-model="show" size="xl" title="ใบส่งสินค้า">
                     <b-container>
                         <div class="text-center pt-2">
                             <h2>{{ this.suan }}</h2>
@@ -67,18 +67,20 @@
 
                         <b-row>
                             <b-col class="pt-4 pb-3">
-                                <h5>ส่งจาก: สวนมังคุดบ้านโย</h5>
+                                <h5>ส่งจาก: คุณ {{ this.currentUser.name }}</h5>
                                 <h5>ถึง: คุณ {{ this.partner.name }}</h5>
+                                <h5>วันที่: {{ this.detail.date }}</h5>
                             </b-col>
                             <b-col class="pt-4 pb-3">
-                                <h5>ติดต่อ: {{ this.currentUser.contact_number }}</h5>
+                                <h5>ติดต่อ: {{ this.currentUser.contact_number }} </h5>
                                 <h5>ติดต่อ: {{ this.partner.contact }}</h5>
                             </b-col>
                         </b-row>
                         
                         <b-table :bordered="true" :light="true" :items="invoice" :fields="invoiceFields"></b-table>
 
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-between">
+                            <h5>สถานะ: -</h5>
                             <h5>ราคารวม {{ this.detail.price }} บาท</h5>
                         </div>
                         
@@ -132,6 +134,7 @@ export default {
                 crate: 0,
                 delivery: 0,
                 price: "",
+                date: "",
             },
         }
     },
@@ -151,9 +154,10 @@ export default {
             if (this.weight == "" || this.weight == null || this.weight.startsWith("0") || this.weight.includes("-") || this.weight.includes("+") || this.weight <= 0) {
                 this.$swal("ไม่สามารถคำนวณได้", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
             } else {
-                if (this.selected == "") {
+                if (this.selected.length == 0) {
                     this.$swal("ไม่สามารถทำรายการได้", "โปรดเลือกลูกค้าที่ต้องการจัดส่ง", "error");
                 } else {
+                        this.detail.date = new Date().toLocaleDateString('en-CA');
                         this.detail.crate = Math.ceil(this.weight / 25);
                         this.detail.delivery = Math.ceil(this.detail.crate / 42);
                         this.detail.price = (this.weight * 35).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -180,13 +184,14 @@ export default {
                         weight: this.detail.weight,
                         price: (this.weight * 35).toFixed(2) * 1.0,
                         create_by: this.currentUser.id,
-                        to: this.selected[0].id,
+                        sent_to: this.selected[0].id,
                     }
                     let res = await AdminStore.dispatch('createInvoice', payload)
                     if (res.success) {
-                        this.$swal("การสั่งงานสำเร็จ", "คุณได้สั่งพนักงานเก็บผลไม้แล้ว", "success");
+                        this.show = false;
+                        this.$swal("สร้างใบส่งสินค้าสำเร็จ", "ทำการส่งใบส่งของให้ลูกค้า", "success");
                     } else {
-                        this.$swal("การสั่งงานไม่สำเร็จ", "ไม่สามารถสั่งงานได้", "error");
+                        this.$swal("สร้างใบส่งสินค้าไม่สำเร็จ", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
                     }
                 }
             } 
@@ -219,7 +224,6 @@ export default {
         /deep/ .table > tbody > tr.b-table-row-selected,
         /deep/ .table > tbody > tr.b-table-row-selected > td,
         /deep/ .table > tbody > tr.b-table-row-selected > th {
-        //background-color: #DE89BE;
         background-color: #5C2751;
     }
     .field {

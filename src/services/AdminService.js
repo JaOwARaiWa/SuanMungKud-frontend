@@ -37,6 +37,168 @@ export default {
         }
     },
 
+    async getMyWork(id) {
+        try {
+            let url = `${api_endpoint}/api/admin/my-work/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header);
+            if (res.data.message == "no assignment")
+            {
+               return {
+                   success: false,
+                   data: res.data.message
+                }
+            } else {
+                return {
+                    success: true,
+                    data: res.data.work
+                }
+            }
+        } catch (e) {
+            
+        }
+    },
+
+    async getMyInvoice(id) {
+        try {
+            let url = `${api_endpoint}/api/admin/my-invoice/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header);
+            if (res.data.message == "no invoice")
+            {
+               return {
+                   success: false,
+                   data: res.data.message
+                }
+            } else {
+                return {
+                    success: true,
+                    data: res.data.invoice
+                }
+            }
+        } catch (e) {
+            
+        }
+    },
+
+    async getTodayInvoice(date) {
+        try {
+            let url = `${api_endpoint}/api/admin/today-invoice/${date}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header);
+            return res
+        } catch (e) {
+            
+        }
+    },
+
+    async getAlreadyAssigned(date) {
+        try {
+            let url = `${api_endpoint}/api/admin/already-assigned/${date}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.get(url, header);
+            return res
+        } catch (e) {
+            
+        }
+    },
+
+    async accepted(id) {
+        try {
+            let url = `${api_endpoint}/api/admin/accept-invoice/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.post(url, "", header)
+            if (res.data.message == "done")
+            {
+               return {
+                   success: true,
+                }
+            } else {
+                return {
+                    success: false,
+                }
+            }
+        } catch (e) {
+            if (e.response.status === 400) {
+                console.error(e.response.data.message[0].messages[0].message)
+                return {
+                    success: false,
+                    message: e.response.data.message[0].messages[0].message
+                }
+            } else {
+                console.error(e.response)
+                return {
+                    success: false,
+                    message: "Unknown error: " + e.response
+                }
+            }
+        }
+    },
+
+    async workDone(id) {
+        try {
+            let url = `${api_endpoint}/api/admin/done-work/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.post(url, "", header)
+            if (res.data.message == "done")
+            {
+               return {
+                   success: true,
+                }
+            } else {
+                return {
+                    success: false,
+                }
+            }
+        } catch (e) {
+            if (e.response.status === 400) {
+                console.error(e.response.data.message[0].messages[0].message)
+                return {
+                    success: false,
+                    message: e.response.data.message[0].messages[0].message
+                }
+            } else {
+                console.error(e.response)
+                return {
+                    success: false,
+                    message: "Unknown error: " + e.response
+                }
+            }
+        }
+    },
+
+    async updatePaymentStatus(id) {
+        try {
+            let url = `${api_endpoint}/api/admin/update-payment-status/${id}`;
+            let header = AuthService.getApiHeader();
+            let res = await Axios.post(url, "", header)
+            if (res.data.message == "updated")
+            {
+               return {
+                   success: true,
+                }
+            } else {
+                return {
+                    success: false,
+                }
+            }
+        } catch (e) {
+            if (e.response.status === 400) {
+                console.error(e.response.data.message[0].messages[0].message)
+                return {
+                    success: false,
+                    message: e.response.data.message[0].messages[0].message
+                }
+            } else {
+                console.error(e.response)
+                return {
+                    success: false,
+                    message: "Unknown error: " + e.response
+                }
+            }
+        }
+    },
+
     async getCanAssigned(date) {
         try {
             let url = `${api_endpoint}/api/admin/can-assigned/${date}`;

@@ -20,34 +20,6 @@
 
             </div>
 
-            <!-- <b-form class="background bg-dark">
-                <div class="table-wrap">
-                    <table class="table .table-responsive table-sm table-bordered table-hover table-striped table-dark">
-                        <thead>
-                            <tr>
-                                <th>id</th>
-                                <th>ตำแหน่ง</th>
-                                <th>ชื่อ</th>
-                                <th>email</th>
-                                <th>เบอร์ติดต่อ</th>
-                                <th>เลขบัญชี</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(user, index) in resultQuery" :key="index" v-if="user.role == 'EMPLOYEE'">
-                                <td><b-form-checkbox  />{{ user.id }}</td>
-                                <td>{{ user.role }}</td>
-                                <td>{{ user.name }}</td>
-                                <td>{{ user.email }}</td>
-                                <td>{{ user.contact_number }}</td>
-                                <td>{{ user.bank_account }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </b-form> -->
-
             <div class="table-wrap bg-dark">
                 <b-table selected-variant="" :bordered="true" :hover="true" :dark="true" :items="resultQuery" :fields="fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected">
                     <template #cell(selected)="{ rowSelected }">
@@ -114,17 +86,12 @@ export default {
         }
     },
     async created(){
-        // await this.fetchEmployeee();
         await this.fetchCanAssigned();
     },
     methods:{
-        // async fetchEmployeee() {
-        //     await AdminStore.dispatch('fetchEmployeee')
-        //     this.allUsers = AdminStore.getters.users;
-        // },
         async fetchCanAssigned() {
             let date = new Date().toLocaleDateString('en-CA')
-            await AdminStore.dispatch('fetchCanAssigned', date)
+            let res = await AdminStore.dispatch('fetchCanAssigned', date)
             this.allUsers = AdminStore.getters.users;
             this.searchList = AdminStore.getters.users;
             this.currentUser = AuthUser.getters.user
