@@ -6,7 +6,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-4">
-                        <h1 class="text-dark">รายการใบส่งของ</h1>
+                        <h1 class="text-dark">รายการใบส่งสินค้า</h1>
                     </div>
                     <div class="col-3"></div>
                     <div class="col-5">
@@ -18,14 +18,14 @@
 
             <b-row>
                 <div class="col-6 table-wrap bg-dark">
-                    <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :hover="true" :dark="true" :items="todayInvoice" :fields="pn_fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected">
+                    <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :dark="true" :items="todayInvoice" :fields="pn_fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected">
                     </b-table>
                 </div>
 
                 <div class="col-1"></div>
 
                 <div class="col-5 table-wrap bg-dark">
-                    <b-table selected-variant="" :bordered="true" :hover="true" :dark="true" :items="alreadyAssignedEmployee" :fields="em_fields" responsive="sm">
+                    <b-table selected-variant="" :bordered="true" :dark="true" :items="alreadyAssignedEmployee" :fields="em_fields" responsive="sm">
                     </b-table>
                 </div>
             </b-row>
@@ -58,7 +58,7 @@
                     </b-col>
                 </b-row>
 
-                <b-modal v-model="showInvoice" size="xl" title="ใบส่งของ">
+                <b-modal v-model="showInvoice" size="xl" title="ใบส่งสินค้า">
                     <b-container>
                         <div class="text-center pt-2">
                             <h2>{{ this.suan }}</h2>
@@ -66,12 +66,13 @@
 
                         <b-row>
                             <b-col class="pt-4 pb-3">
-                                <h5>ส่งจาก: สวนมังคุดบ้านโย</h5>
-                                <h5>ถึง: คุณ {{ this.partner.name }}</h5>
+                                <h5>ส่งจาก: {{ this.partner.from_name }}</h5>
+                                <h5>ถึง: คุณ {{ this.partner.to_name }}</h5>
+                                <h5>วันที่: {{ this.detail.date }}</h5>
                             </b-col>
                             <b-col class="pt-4 pb-3">
-                                <h5>ติดต่อ: 0878758585</h5>
-                                <h5>ติดต่อ: {{ this.partner.contact }}</h5>
+                                <h5>ติดต่อ: {{ this.partner.from_contact }}</h5>
+                                <h5>ติดต่อ: {{ this.partner.to_contact }}</h5>
                             </b-col>
                         </b-row>
                         
@@ -133,12 +134,20 @@ export default {
                 { key: 'sent_to.name', label: 'ลูกค้า' },
                 { key: 'invoice.status', label: 'สถานะ'}
             ],
-            invoiceFields: ['product', 'weight', 'crate', 'delivery', 'price'],
+            invoiceFields: [
+                { key:'product', label: 'สินค้าที่ส่ง'}, 
+                { key:'weight', label: 'น้ำหนัก'},
+                { key:'crate', label: 'จำนวนลัง'},
+                { key:'delivery', label: 'รอบการขนส่ง'},
+                { key:'price', label: 'ราคา'}, 
+            ],
             weight: '',
             suan: 'SUANMUNGKUD',
             partner: {
-                name: "",
-                contact: ""
+                to_name: "",
+                to_contact: "",
+                from_name: "",
+                from_contact: "",
             },
             invoice: [],
             detail: {
@@ -171,6 +180,7 @@ export default {
             await InvoiceStore.dispatch('fetchTodayInvoice', date)
             this.todayInvoice = InvoiceStore.getters.datas;
             if (this.todayInvoice != null) {
+                this.total_weight = 0
                 await this.todayInvoice.forEach( item => {
                     this.total_weight += item.invoice.weight
                 });
@@ -179,13 +189,16 @@ export default {
         prevent() {
             if (this.total_weight == 0) {
                 return true
-            }
+            }// } else if (this.alreadyAssignedEmployee[0].work_id.payment_status == "จ่ายค่าจ้างแล้ว") {
+            //     return true
+            // }
             return false
         },
         openInvoice() {
             if (this.selected.length == 0) {
-                return this.$swal("ไม่สามารถเปิดใบส่งของได้", "กรุณาเลือกใบส่งของ", "error")
+                return this.$swal("ไม่สามารถเปิดใบส่งสินค้าได้", "กรุณาเลือกใบส่งสินค้า", "error")
             }
+            console.log(this.selected[0].sent_to)
             this.detail.date = this.selected[0].invoice.date
             this.detail.from = this.selected[0].create_by.name
             this.detail.contact = this.selected[0].create_by.contact_number
@@ -193,8 +206,10 @@ export default {
             this.detail.delivery = this.selected[0].invoice.delivery;
             this.detail.price = (this.selected[0].invoice.price).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
             this.detail.weight = this.selected[0].invoice.weight;
-            this.partner.name = this.selected[0].create_by.name;
-            this.partner.contact = this.selected[0].create_by.contact_number;
+            this.partner.to_name = this.selected[0].sent_to.name;
+            this.partner.to_contact = this.selected[0].sent_to.contact_number;
+            this.partner.from_name = this.selected[0].create_by.name;
+            this.partner.from_contact = this.selected[0].create_by.contact_number;
             this.detail.status = this.selected[0].invoice.status;
             if (this.invoice.length == 0) {
                 this.invoice.push(this.detail);
@@ -218,26 +233,10 @@ export default {
         },
         async onSubmit() {
             if (this.todaInvoice != null || this.alreadyAssignedEmployee != null) {
-                if (this.alreadyAssignedEmployee[0].work_id.payment_status == "จ่ายค่าจ้างแล้ว") {
-                    return this.$swal("ไม่สามารถดำเนินการได้", "ได้ทำการจ่ายค่าจ้างแล้ว", "error");
-                } else {
-                    this.todayInvoice.forEach(item => {
-                        if (item.invoice.status == "กำลังจัดส่ง") {
-                            return this.$swal("ไม่สามารถจ่ายเงินได้", "เนื่องจากข้อมูลยังไม่ถูกต้อง", "error");
-                        }
-                    })
-
-                    this.alreadyAssignedEmployee.forEach(item => {
-                        if (item.is_finished == "กำลังทำ") {
-                            return this.$swal("ไม่สามารถจ่ายเงินได้", "เนื่องจากข้อมูลยังไม่ถูกต้อง", "error");
-                        }
-                    })
-
-                    await AdminStore.dispatch('updatePaymentStatus', this.alreadyAssignedEmployee[0].work_id.id)
-                    this.fetchAlreadyAssigned()
-                    this.fetchTodayInvoice()
-                    return this.$swal("ทำรายการสำเร็จ", "กำลังดำเนินการโอนเงินให้พนักงาน", "success");
-                }
+                await AdminStore.dispatch('updatePaymentStatus', this.alreadyAssignedEmployee[0].work_id.id)
+                this.fetchAlreadyAssigned()
+                this.fetchTodayInvoice()
+                return this.$swal("ทำรายการสำเร็จ", "กำลังดำเนินการโอนเงินให้พนักงานที่ทำงานเสร็จสิ้น", "success");
             } else {
                 return this.$swal("ไม่สามารถจ่ายเงินได้", "เนื่องจากข้อมูลยังไม่ถูกต้อง", "error");
             }

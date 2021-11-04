@@ -21,7 +21,7 @@
             </div>
 
             <div class="table-wrap bg-dark">
-                <b-table selected-variant="" :bordered="true" :hover="true" :dark="true" :items="resultQuery" :fields="fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected">
+                <b-table selected-variant="" :bordered="true" :dark="true" :items="resultQuery" :fields="fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected">
                     <template #cell(selected)="{ rowSelected }">
                         <template v-if="rowSelected">
                             <span aria-hidden="true">&check;</span>
@@ -81,7 +81,15 @@ export default {
             allUsers: [],
             searchList: [],
             show: false,
-            fields: ['selected', 'id', 'role', 'name', 'contact_number'],
+            // fields: ['selected', 'id', 'role', 'name', 'contact_number'],
+            fields: [
+                { key: 'selected', label: 'เลือก' },
+                'id',
+                { key: 'role', label: 'ตำแหน่ง' },
+                { key: 'name', label: 'ชื่อ' },
+                { key: "contact_number", label: 'เบอร์ติดต่อ'},
+                // { key: "work_id.amount", label: 'จำนวนเงิน'}
+            ],
             selected: [],
         }
     },

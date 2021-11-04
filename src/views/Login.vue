@@ -72,20 +72,16 @@ export default {
 
             if (this.form.email == "" || this.form.password == "") {
                 if (this.form.email == "" && this.form.password != "") {
-                    // this.errors = 'email required'
-                    // this.$swal("Please enter your email", "Check if you already enter email or not", "error")
                     this.errors = 'fields required'
-                    this.$swal("Please fill out all fields", "You have to enter your email and password to login", "error")
+                    this.$swal("ไม่สามารถเข้าสู่ระบบได้", "กรุณากรอกข้อมูลให้ครบถ้วน", "error")
 
                 } else if (this.form.password == "" && this.form.email != "") {
-                    // this.errors = 'password required'
-                    // this.$swal("Please enter your password", "Check if you already enter password or not", "error")
                     this.errors = 'fields required'
-                    this.$swal("Please fill out all fields", "You have to enter your email and password to login", "error")
+                    this.$swal("ไม่สามารถเข้าสู่ระบบได้", "กรุณากรอกข้อมูลให้ครบถ้วน", "error")
 
                 } else if (this.form.email == "" && this.form.password == "") {
                     this.errors = 'fields required'
-                    this.$swal("Please fill out all fields", "You have to enter your email and password to login", "error")
+                    this.$swal("ไม่สามารถเข้าสู่ระบบได้", "กรุณากรอกข้อมูลให้ครบถ้วน", "error")
 
                 } 
             } else {
@@ -95,12 +91,12 @@ export default {
                 }
                 let res = await AuthUser.dispatch('login', payload)
                 if (res.success) {
-                    this.$swal("Login successfully", `Welcome, ${res.user.name}`, "success")
+                    this.$swal("เข้าสู่ระบบสำเร็จ", `ยินดีต้อนรับคุณ ${res.user.name}`, "success")
                     this.$router.push('/home')
 
                 } else {
                     this.errors = 'email or password invalid.'
-                    this.$swal("Login failed", "Please check your email and password", "error")
+                    this.$swal("ไม่สามารถเข้าสู่ระบบได้", "เนื่องจาก email หรือ password ไม่ถูกต้อง", "error")
                     this.clearForm()
 
                 }

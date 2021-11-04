@@ -45,7 +45,7 @@ export default {
         async logout() {
             let res = await AuthUser.dispatch("logout")
             if (res.success) {
-                this.$swal("Logout successfully", "See you again next time", "success")
+                this.$swal("ออกจากระบบสำเร็จ", "", "success")
                 this.$router.push("/")
             }
         },

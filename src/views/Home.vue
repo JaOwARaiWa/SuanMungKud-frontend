@@ -65,7 +65,7 @@ export default {
     },
     mounted() {
         if (!this.isAuthen()) {
-            this.$swal("Restricted area", "Please login before access", "warning")
+            this.$swal("ไม่สามารถเข้าถึงได้", "โปรดเข้าสู่ระบบก่อน", "warning")
             this.$router.push("/")
         }
     },

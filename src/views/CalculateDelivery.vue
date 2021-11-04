@@ -28,7 +28,7 @@
             </div>
 
             <div class="table-wrap bg-dark">
-                <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :hover="true" :dark="true" :items="resultQuery" :fields="fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected">
+                <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :dark="true" :items="resultQuery" :fields="fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected">
                     <template #cell(selected)="{ rowSelected }">
                         <template v-if="rowSelected">
                             <span aria-hidden="true">&check;</span>
@@ -117,8 +117,20 @@ export default {
             allUsers: [],
             searchList: [],
             show: false,
-            fields: ['selected', 'id', 'role', 'name', 'contact_number'],
-            invoiceFields: ['product', 'weight', 'crate', 'delivery', 'price'],
+            fields: [
+                { key: 'selected', label: 'เลือก' },
+                'id',
+                { key: 'role', label: 'ตำแหน่ง' },
+                { key: 'name', label: 'ชื่อ' },
+                { key: 'contact_number', label: 'เบอร์ติดต่อ'},
+            ],
+            invoiceFields: [
+                { key:'product', label: 'สินค้าที่ส่ง'}, 
+                { key:'weight', label: 'น้ำหนัก'},
+                { key:'crate', label: 'จำนวนลัง'},
+                { key:'delivery', label: 'รอบการขนส่ง'},
+                { key:'price', label: 'ราคา'}, 
+            ],
             selectMode: 'single',
             selected: {},
             weight: '',
@@ -152,10 +164,10 @@ export default {
         },
         onCheck() {
             if (this.weight == "" || this.weight == null || this.weight.startsWith("0") || this.weight.includes("-") || this.weight.includes("+") || this.weight <= 0) {
-                this.$swal("ไม่สามารถคำนวณได้", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
+                this.$swal("ไม่สามารถทำรายการได้", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
             } else {
-                if (this.selected.length == 0) {
-                    this.$swal("ไม่สามารถทำรายการได้", "โปรดเลือกลูกค้าที่ต้องการจัดส่ง", "error");
+                if (this.selected.length == 0 || this.selected == null || this.selected == undefined || this.selected[0] == undefined) {
+                    this.$swal("ไม่สามารถทำรายการได้", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
                 } else {
                         this.detail.date = new Date().toLocaleDateString('en-CA');
                         this.detail.crate = Math.ceil(this.weight / 25);
@@ -173,10 +185,10 @@ export default {
         },
         async onSubmit() {
             if (this.weight == "" || this.weight == null || this.weight.startsWith("0") || this.weight.includes("-") || this.weight.includes("+") || this.weight <= 0) {
-                this.$swal("ไม่สามารถคำนวณได้", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
+                this.$swal("ไม่สามารถทำรายการได้", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
             } else {
-                if (this.selected == "") {
-                    this.$swal("ไม่สามารถทำรายการได้", "โปรดเลือกลูกค้าที่ต้องการจัดส่ง", "error");
+                if (this.selected.length == 0) {
+                    this.$swal("ไม่สามารถทำรายการได้", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
                 } else {
                     let payload = {
                         crate: this.detail.crate,
@@ -189,7 +201,7 @@ export default {
                     let res = await AdminStore.dispatch('createInvoice', payload)
                     if (res.success) {
                         this.show = false;
-                        this.$swal("สร้างใบส่งสินค้าสำเร็จ", "ทำการส่งใบส่งของให้ลูกค้า", "success");
+                        this.$swal("สร้างใบส่งสินค้าสำเร็จ", "ทำการส่งใบส่งสินค้าให้ลูกค้า", "success");
                     } else {
                         this.$swal("สร้างใบส่งสินค้าไม่สำเร็จ", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
                     }

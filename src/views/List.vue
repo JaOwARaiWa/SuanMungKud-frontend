@@ -33,7 +33,7 @@
             </div>
 
             <div class="table-wrap bg-dark">
-                <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :hover="true" :dark="true" :items="resultQuery" :fields="fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected" v-if="role() == 'ADMIN'">
+                <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :dark="true" :items="resultQuery" :fields="fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected" v-if="role() == 'ADMIN'">
                     <template #cell(selected)="{ rowSelected }">
                         <template v-if="rowSelected">
                             <span aria-hidden="true">&check;</span>
@@ -45,7 +45,7 @@
                         </template>
                     </template>
                 </b-table>
-                <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :hover="true" :dark="true" :items="allUsers" :fields="em_fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected" v-if="role() == 'EMPLOYEE'">
+                <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :dark="true" :items="allUsers" :fields="em_fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected" v-if="role() == 'EMPLOYEE'">
                     <template #cell(selected)="{ rowSelected }">
                         <template v-if="rowSelected">
                             <span aria-hidden="true">&check;</span>
@@ -57,7 +57,7 @@
                         </template>
                     </template>
                 </b-table>
-                <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :hover="true" :dark="true" :items="allUsers" :fields="pn_fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected" v-if="role() == 'PARTNER'">
+                <b-table selected-variant="" :select-mode="selectMode" :bordered="true" :dark="true" :items="allUsers" :fields="pn_fields" responsive="sm" ref="selectableTable" selectable @row-selected="onRowSelected" v-if="role() == 'PARTNER'">
                     <template #cell(selected)="{ rowSelected }">
                         <template v-if="rowSelected">
                             <span aria-hidden="true">&check;</span>
@@ -108,7 +108,7 @@
                                 ได้รับสินค้า
                             </button>
 
-                            <b-modal v-model="showInvoice" size="xl" title="ใบส่งของ">
+                            <b-modal v-model="showInvoice" size="xl" title="ใบส่งสินค้า">
                                 <b-container>
                                     <div class="text-center pt-2">
                                         <h2>{{ this.suan }}</h2>
@@ -204,7 +204,7 @@ import Header from '@/components/Header.vue'
 import AdminStore from "@/store/Admin"
 import AuthUser from '@/store/AuthUser'
 import { validationMixin } from "vuelidate";
-import { required, minLength, email } from "vuelidate/lib/validators";
+import { required, minLength, email, numeric } from "vuelidate/lib/validators";
 
 export default {
     name:'List',
@@ -229,20 +229,43 @@ export default {
                 contact_number: "",
                 bank_account: "",
             },
-            fields: ['selected', 'id', 'role', 'name', 'email', 'contact_number', 'bank_account'],
-            em_fields: ['selected', 'date', { key: 'work_id.name', label: 'detail' }, 'is_finished'],
+            fields: [
+                { key: 'selected', label: 'เลือก' },
+                'id',
+                { key: 'role', label: 'ตำแหน่ง' },
+                { key: 'name', label: 'ชื่อ' },
+                { key: 'contact_number', label: 'เบอร์ติดต่อ'},
+                'email',
+                { key: 'bank_account', label: 'เลขบัญชี'},
+                
+            ],
+            em_fields: [
+                { key: 'selected', label: 'เลือก' },
+                { key: 'date', label: 'วันที่' },
+                { key: 'work_id.name', label: 'รายละเอียด' },
+                { key: 'is_finished', label: 'สถานะการทำงาน' },
+                { key: "payment_status", label: 'สถานะการจ่ายเงิน'},
+                // { key: "work_id.amount", label: 'จำนวนเงิน'}
+            ],
             pn_fields: [
-                'selected',
-                'date',
-                { key: 'invoice.weight', label: 'weight' },
-                { key: 'invoice.crate', label: 'crate' },
-                { key: 'invoice.delivery', label: 'delivery'},
-                { key: 'invoice.price', label: 'price' },
-                { key: 'invoice.status', label: 'status'}],
+                { key: 'selected', label: 'เลือก' },
+                { key: 'date', label: 'วันที่' },
+                { key: 'invoice.weight', label: 'น้ำหนัก' },
+                { key: 'invoice.crate', label: 'จำนวนลัง' },
+                { key: 'invoice.delivery', label: 'รอบการขนส่ง'},
+                { key: 'invoice.price', label: 'ราคารวม' },
+                { key: 'invoice.status', label: 'สถานะการจัดส่ง'},
+            ],
             selectMode: 'single',
             selected: [],
 
-            invoiceFields: ['product', 'weight', 'crate', 'delivery', 'price'],
+            invoiceFields: [
+                { key:'product', label: 'สินค้าที่ส่ง'}, 
+                { key:'weight', label: 'น้ำหนัก'},
+                { key:'crate', label: 'จำนวนลัง'},
+                { key:'delivery', label: 'รอบการขนส่ง'},
+                { key:'price', label: 'ราคา'}, 
+            ],
             weight: '',
             suan: 'SUANMUNGKUD',
             partner: {
@@ -290,11 +313,13 @@ export default {
             },
             contact_number: {
                 required,
-                minLength: minLength(10)
+                minLength: minLength(10),
+                numeric
             },
             bank_account: {
                 required,
-                minLength: minLength(10)
+                minLength: minLength(10),
+                numeric
             },
         }
     },
@@ -310,7 +335,6 @@ export default {
         },
         async fetchMyWork() {
             let res = await AdminStore.dispatch('fetchMyWork', this.currentUser.id)
-            console.log(res);
             this.searchList = AdminStore.getters.users
             this.allUsers = AdminStore.getters.users
             this.currentUser = AuthUser.getters.user
@@ -323,7 +347,7 @@ export default {
         },
         openInvoice() {
             if (this.selected.length == 0) {
-                return this.$swal("ไม่สามารถเปิดใบส่งของได้", "กรุณาเลือกใบส่งของ", "error")
+                return this.$swal("ไม่สามารถเปิดใบส่งสินค้าได้", "กรุณาเลือกใบส่งสินค้า", "error")
             }
             this.detail.date = this.selected[0].invoice.date
             this.detail.from = this.selected[0].create_by.name
@@ -372,7 +396,7 @@ export default {
                     this.$swal("ลบผู้ใช้สำเร็จ", `ได้ลบผู้ใช้ออกจากระบบแล้ว`, "success")
                     await this.fetchAllUser()
                 } else {
-                    this.$swal("ลบผู้ใช้ไม่สำเร็จ", `ไม่สามารถลบผู้ใช้นี้ได้`, "error")
+                    this.$swal("ลบผู้ใช้ไม่สำเร็จ", `ไม่สามารถทำรายการได้`, "error")
                 }                
             }
         },
@@ -401,14 +425,14 @@ export default {
         },
         async workDone() {
             if (this.allUsers.length == 0 || this.selected.length == 0|| this.selected[0].is_finished == "เสร็จสิ้น") {
-                this.$swal("ไม่สามารถทำรายการได้", `กรุณาตรวจสอบข้อมูลอีกครั้ง`, "error")
+                this.$swal("ไม่สามารถทำรายการได้", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
             } else {
                 let res = await AdminStore.dispatch('workDone', this.allUsers[0].id)
                 if (res.success) {
-                    this.$swal("การทำงานเสร็จสิ้น", `คุณได้ทำงานที่ได้รับมอบหมายแล้ว`, "success")
+                    this.$swal("การทำงานเสร็จสิ้น", `ระบบได้บันทึกการทำงานของคุณแล้ว`, "success")
                     await this.fetchMyWork()
                 } else {
-                    this.$swal("ไม่สามารถทำรายการได้", `โปรfตรวจสอบข้อมูลอีกครั้ง`, "error")
+                    this.$swal("ไม่สามารถทำรายการได้", "โปรดตรวจสอบข้อมูลอีกครั้ง", "error");
                 }
             }
         },
@@ -418,7 +442,7 @@ export default {
             } else {
                 let res = await AdminStore.dispatch('accepted', this.selected[0].id)
                 if (res.success) {
-                    this.$swal("คุณได้รับสินค้าแล้ว", `ระบบกำลังทำการโอนเงิน`, "success")
+                    this.$swal("คุณได้รับสินค้าแล้ว", `ระบบกำลังทำการโอนเงินให้ทางผู้ส่งสินค้า`, "success")
                     await this.fetchMyInvoice()
                 } else {
                     this.$swal("ไม่สามารถทำรายการได้", `โปรดตรวจสอบข้อมูลอีกครั้ง`, "error")
